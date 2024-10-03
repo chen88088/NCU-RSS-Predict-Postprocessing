@@ -109,7 +109,6 @@ if __name__ == '__main__':
         f1_score_list.append(f1_score)
          
 
-
         matrix = confusion(gts,predicts)
         str_matrix = "["
         for x in matrix.ravel():
@@ -121,8 +120,7 @@ if __name__ == '__main__':
         # save predictions
         df = pd.DataFrame({'parcel_nums': pks,
                     'labels': gts,
-                    'predictions':predicts,
-                    'area_weights':Shape_Areas})
+                    'predictions':predicts})
     
         df.to_csv(os.path.join(os.path.join(false_entries_path,'%s_predictions.csv'%frame_name)))
 
@@ -138,6 +136,7 @@ if __name__ == '__main__':
                         error_type='fp'
                     fh.write("%s\t%s\t%s\t%s\n"%(pks[i],gts[i],predicts[i],error_type))
     
+    
     metrics_path_base=metrics_path.split('/')[0]
     if not os.path.exists(metrics_path_base):os.mkdir(metrics_path_base)
     df = pd.DataFrame({'frame_name': frame_name_list,
@@ -146,7 +145,7 @@ if __name__ == '__main__':
                     'kappa_w_area_weights':kappa_w_area_list,
                     'f1_score':f1_score_list})
 
-    
+    print(os.path.join(metrics_path))
     df.to_csv(os.path.join(metrics_path))
 
     

@@ -21,8 +21,7 @@ def create_folder():
 
 
 def create_pgw():
-    # All_IMG_Path = directory + "/" + TIF_Path + "/*.tif"
-    All_IMG_Path = TIF_Path + "/*.tif"
+    All_IMG_Path = directory + "/" + TIF_Path + "/*.tif"
     files = glob.glob(All_IMG_Path)
     
     for file in files:
@@ -42,7 +41,6 @@ def create_pgw():
         old_img = directory + "/" + raster_PGW_Path + "/" + filename + ".pgw"
         new_img = directory + "/" + raster_PGW_Path + "/" + pgwname[0] + "_" + pgwname[1] + ".pgw"
         os.rename(old_img, new_img)
-    
     auxs = glob.glob(__raster_AUX_Path_regex)
     auxs =[x for x in auxs if '.png.aux' in x]
     for aux in auxs:

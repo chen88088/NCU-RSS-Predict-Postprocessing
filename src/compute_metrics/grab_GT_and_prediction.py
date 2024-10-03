@@ -17,6 +17,9 @@ def grab_GT_and_prediction(workspace: str, shp_file_path: str):
         my_layer = "layer_for_selection"
         arcpy.MakeFeatureLayer_management(shp_file_path, my_layer)
         logging.info("grab_GT_and_prediction for %s" % shp_file_path)
+
+        arcpy.management.CalculateGeometryAttributes(shp_file_path, [["Shape_Area", "AREA_GEODESIC"]], "METERS", "SQUARE_METERS")
+
         try:
             gt_and_predictions= [
             row[:4] for row in

@@ -14,33 +14,10 @@ Failed to execute (ZonalStatisticsAsTable).
 ```
 check arcpy workspace in config
 # Usage
-## 準備輸入資料
-1. ./IMG資料夾：將Model predict最後輸出的PNG置於此資料夾。
-注意所有.png必須命名為`FOLD1_TEST_[圖幅號].png`。
-- RSS-1.3輸出之分割結果為黑白遮罩，僅含0或255的像素值。如下範例：  
-![13](./assets/sample_input_13.png)
-- RSS-1.5輸出之分割結果為黑白灰遮罩，含0到255的任意像素值。如下範例：  
-![15](./assets/sample_input_15.png)
-2. 將圖幅號對應的.tif檔置於./TIF。若要一次對多張航照圖進行操作，可以將所有.tif相關檔都放在該目錄。
-任一.tif共包含3個附檔：.dxf, .tfw, .tif
-```powershell
-PS D:\1111_work\NCU-RSS-Predict-Postprocessing> ls .\TIF\
-
-
-    目錄: D:\1111_work\NCU-RSS-Predict-Postprocessing\TIF
-
-
-Mode                 LastWriteTime         Length Name
-----                 -------------         ------ ----
--a----        2023/1/5  下午 07:56        2720277 94201093_181104z_13~0458_hr4.dxf
--a----        2023/1/5  下午 07:56             73 94201093_181104z_13~0458_hr4.tfw
--a----        2023/1/5  下午 07:53     1134613870 94201093_181104z_13~0458_hr4.tif
--a----        2023/2/6  下午 02:52        2705729 94202076_181006z_16~4634_hr4.dxf
--a----        2023/2/6  下午 02:52             73 94202076_181006z_16~4634_hr4.tfw
--a----        2023/2/6  下午 02:52     1134613870 94202076_181006z_16~4634_hr4.tif
-```
-3. 將圖幅號對應的.shp檔置於./SHP。若要一次對多張航照圖進行操作，可以將所有.shp相關檔都放在該目錄。
-任一.tif共包含8個附檔：.cpg, .dbf, .prj, .sbn, .sbx, .shp, .shp.xml, .shx
+## prepare input data
+1. ./PRED folder：put model prediction .txt (`Pred_[frame_id].txt`) to this folder.
+2. Put frame's shape file to ./SHP. You can put shape file of multiple frames in the folder.
+each .shp contain 8 file：.cpg, .dbf, .prj, .sbn, .sbx, .shp, .shp.xml, .shx
 ```powershell
 PS D:\1111_work\NCU-RSS-Predict-Postprocessing> ls .\SHP\
 
@@ -77,9 +54,9 @@ Mode                 LastWriteTime         Length Name
 `C:\program files\arcgis\pro\Resources\ArcToolbox\toolboxes\Conversion Tools.tbx`
 - directory: 指定本repo資料夾位置，以本範例此路徑為
 `C:\Users\[使用者名稱]\Downloads\NCU-RSS-Predict-Postprocessing`
-## 執行程式
+## run program
 ```powershell
-C:\'Program Files'\ArcGIS\Pro\bin\Python\envs\arcgispro-py3\python.exe ./main.py
+C:\'Program Files'\ArcGIS\Pro\bin\Python\envs\arcgispro-py3\python.exe ./write_back_pred_to_shp.py
 ```
 ## 輸出結果
 查看`Prediction_SHP_Result`，包含寫入判釋結果的SHP。  

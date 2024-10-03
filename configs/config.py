@@ -6,19 +6,18 @@
 
 import os
 
-#workspace = r"C:\Users\AOIpc\Documents\ArcGIS\Projects\DMC3\DMC3.gdb"
-workspace = r"C:\Users\chen88088\Documents\ArcGIS\Projects\PNGOutput\PNGOutput.gdb"
-Tool_box = r"C:\Program Files\ArcGIS\Pro\Resources\ArcToolbox\toolboxes\Conversion Tools.tbx"
-#r"D:\PhD\COA\RICE\Github\NCU-RSS-Predict-Postprocessing"
-directory = r"D:\testMOA\NCU-RSS-Predict-Postprocessing"
+
+workspace = r"C:\Users\AOIpc\Documents\ArcGIS\Projects\MidTerm Report\MidTerm Report.gdb"
+Tool_box = r"C:\Users\AOIpc\AppData\Local\Programs\ArcGIS\Pro\Resources\ArcToolBox\toolboxes\Conversion Tools.tbx"
+directory = r"D:\RSS-1.5_code\NCU-RSS-Predict-Postprocessing"
 Predict_True_Lable = "\'水稻\'"
 Predict_False_Lable = "\'非水稻\'"
-# SHP_Path = r"D:\testMOA\testData\SHP"
-# IMG_Path = r"D:\testMOA\IMG"
-# TIF_Path = r"D:\testMOA\testData\TIF"
-SHP_Path = r"\SHP"
-IMG_Path = r"\IMG"
-TIF_Path = r"\TIF"
+SHP_Path = r"SHP"
+IMG_Path = r'IMG'
+TIF_Path = r'TIF'
+Pred_Path = r'PRED'
+OPENMAX_PATH = r'OPENMAX\test_openset_scores.txt' # the OOD detection prediction
+MODEL_NAME = r"NCU-RSS-1.6-TW-0616" # please rename as the model used to make the prediction
 #--------------------------DON'T CHANGE anything below----------------------------------#
 debug=False
 sql_query = "MEAN > 123"
@@ -26,6 +25,7 @@ raster_Mask_Path =   directory +"/raster_Mask"
 raster_PNG_Path = r'raster_PNG'
 raster_PGW_Path = r'raster_PGW'
 Prediction_SHP_Result_Path = directory + '/Prediction_SHP_Result'
+Prediction_SHP_OOD_Path = directory + '/Prediction_SHP_Result_ood'
 class_field = 'Label_Num'
 pk_field='VPC'
 label_num_2_class={
@@ -36,7 +36,7 @@ label_num_2_class={
             "90100":"非水稻",
             "90200":"非水稻",
             "99900":"非水稻", 
-            "0":"非水稻"      
+            "0":"非水稻"    
         }
 
 

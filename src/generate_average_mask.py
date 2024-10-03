@@ -1,42 +1,56 @@
+
 # 必須由ArcGIS的python環境執行
 import shutil
 
 import arcpy
 import os
 import glob
+import numpy as np
 
 from PIL import Image
+Image.MAX_IMAGE_PIXELS = None
 from arcpy.sa import ZonalStatisticsAsTable
 
 from configs.config import workspace, SHP_Path, IMG_Path, raster_Mask_Path, Tool_box, directory, raster_PGW_Path, TIF_Path
 
-import numpy as np
 
 def resize_predict_img():
     preidct_IMG_Path = IMG_Path + "/*.png"
     files = glob.glob(preidct_IMG_Path)
     
-    # _all_tif_paths:list[str]=glob.glob(directory + "/" + TIF_Path + "/*.tif")
-    _all_tif_paths:list[str]=glob.glob(TIF_Path + "/*.tif")
+    _all_tif_paths:list[str]=glob.glob(directory + "/" + TIF_Path + "/*.tif")
     for file in files:
         # obtain img name
         file_name = format(os.path.basename(file).split('.')[0])
         imgname = file_name.split("_")
 
+
         # obtain the width and height of the corresponding tif
         _tif_img_path=None
         for t in _all_tif_paths:
-            if  t.find(imgname[2] + "_" + imgname[3])>-1:
+            if t.find(imgname[2] + "_" + imgname[3])>-1:
                 _tif_img_path=t
                 break
+        print(imgname, file_name)
+        print("resize", _tif_img_path)
 
-        _tif_img=arcpy.RasterToNumPyArray(_tif_img_path)
-        _tif_img = np.transpose(_tif_img, (1, 2, 0))
-        _tif_height, _tif_width, band = _tif_img.shape
+
+        try:
+            _tif_img = arcpy.RasterToNumPyArray(_tif_img_path)
+            print(_tif_img.shape)
+            _tif_height, _tif_width = _tif_img.shape
+        except:
+            _tif_img=Image.open(_tif_img_path)
+            _tif_width=_tif_img.width
+            _tif_height=_tif_img.height
+        # _tif_img = np.transpose(_tif_img, (2, 1, 0))
+        # _tif_img = np.transpose(_tif_img, (1, 2, 0, 3))
+        # _tif_height, _tif_width, band = _tif_img.shape
         
         print(os.path.basename( _tif_img_path))
         print("_tif_width : ", _tif_width)
         print("_tif_height : ", _tif_height)
+        # _tif_img.close()
         
         # copy 2 pgw_path and resize
         new_img = directory + "/" + raster_PGW_Path + "/" + imgname[2] + "_" + imgname[3] + ".png"
@@ -47,8 +61,7 @@ def resize_predict_img():
         # img in raster_PGW_Path is now resized to fit tif
 
 
-# ## change parameter "shp" as shpPath
-def __generate_average_mask(workspace, shpPath, raster_file_name, out_name):
+def __generate_average_mask(workspace, shp, raster_file_name, out_name):
     # To allow overwriting outputs change overwriteOutput option to True.
     arcpy.env.overwriteOutput = True
     arcpy.env.qualifiedFieldNames = False
@@ -64,12 +77,10 @@ def __generate_average_mask(workspace, shpPath, raster_file_name, out_name):
         # Process: Raster To Other Format (Raster To Other Format) (conversion)
         print("raster to other format")
 
-        outZSaT = ZonalStatisticsAsTable(shpPath, "FID", prediction_raster_with_pgw, "zonalstattblout1", "NODATA", "MEAN")
+        outZSaT = ZonalStatisticsAsTable(shp, "FID", prediction_raster_with_pgw, "zonalstattblout1", "NODATA", "MEAN")
 
         # Set local variables
-
-        # ##inFeatures = directory + "/" + shp
-        inFeatures = shpPath
+        inFeatures = directory + "/" + shp
         joinTable = outZSaT
         joinField = "FID"
         outFeature = out_name
