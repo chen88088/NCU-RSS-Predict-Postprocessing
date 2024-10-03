@@ -50,17 +50,17 @@ for shp_file in shp_files:
         for row in cursor:
             fid = str(row[0])
 
-            key = str(row[4])+f'{fid:04}'
+            key = str(row[4])+f'{fid:0>4}'
             # if fid in pred_label_and_confidence_values:
-            if key in pred_label_and_confidence_values:
+            if fid in pred_label_and_confidence_values:
 
-                # if pred_label_and_confidence_values[fid][0] == '1':
-                if pred_label_and_confidence_values[key][0] == '1':
+                if pred_label_and_confidence_values[fid][0] == '1':
+                # if pred_label_and_confidence_values[key][0] == '1':
                     row[1] = '水稻'
                 else :
                     row[1] = '非水稻'
-                # row[2] = float(pred_label_and_confidence_values[fid][1])
-                row[2] = float(pred_label_and_confidence_values[key][1])
+                row[2] = float(pred_label_and_confidence_values[fid][1])
+                # row[2] = float(pred_label_and_confidence_values[key][1])
 
                 row[3] = MODEL_NAME # should be revised using the name of the model
                 row[5] = datetime.now()
